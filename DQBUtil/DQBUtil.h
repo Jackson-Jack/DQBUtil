@@ -9,6 +9,17 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#define WEAK(point) __weak __typeof(point) weak##point = point;
+
+#define kViewWidth      (self.view.frame.size.width)
+#define kViewHeight     (self.view.frame.size.height)
+
+#define kWindowWidth    ([UIScreen mainScreen].bounds.size.width)
+#define kWindowHeight   ([UIScreen mainScreen].bounds.size.height)
+
+#define kScaleFrom_iPhone5(_X_) (_X_ * (kWindowWidth/320))
+#define kScaleFrom_iPhone6(_X_) (_X_ * (kWindowWidth/375))
+
 @interface DQBUtil : NSObject
 
 /**
