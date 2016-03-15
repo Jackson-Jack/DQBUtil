@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name = 'DQBUtil'
-s.version = '1.0.0'
+s.version = '1.0.1'
 s.license = 'MIT'
 s.summary = 'some utility methods apply for iOS apps.'
 s.homepage = 'https://github.com/Jackson-Jack/DQBUtil'
