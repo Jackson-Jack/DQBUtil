@@ -36,11 +36,13 @@ Some utility methods apply for iOS apps
 More convenient methods to be added!
 
 ## How to install
-1. From CocoaPods
+### 1. From CocoaPods
+
 ```
- pod 'DQBUtil'
+	pod 'DQBUtil'
 ```
 
-2. Manually
-* Drag the files under floder DQBUtil to your project.
-* Import the header file：#import "DQBUtil.h"
+### 2. Manually
+
+1. Drag the files under floder DQBUtil to your project.
+2. Import the header file：#import "DQBUtil.h"
