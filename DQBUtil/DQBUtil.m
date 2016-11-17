@@ -152,4 +152,90 @@
     return [UIImage imageWithData:imageData];
 }
 
+
+
+/**
+ *  获取一个类的属性列表
+
++ (NSArray *)propertyListOfClass:(Class)aClass
+{
+    unsigned int outCount, i;
+    objc_property_t *properties = class_copyPropertyList(aClass, &outCount);
+    
+    NSMutableArray *propertyList = [NSMutableArray array];
+    for (i = 0; i < outCount; i++) {
+        objc_property_t property = properties[i];
+        NSString *propertyName = [NSString stringWithUTF8String:property_getName(property)];
+        [propertyList addObject:propertyName];
+    }
+    free(properties);
+    
+    if ([aClass superclass] != [NSObject class]) {
+        NSArray *superClassPropertyList = [self propertyListOfClass:[aClass superclass]];
+        [propertyList addObjectsFromArray:superClassPropertyList];
+    }
+    return propertyList;
+}
+
++ (NSDictionary *)propertyNameTypeDictOfClass:(Class)aClass
+{
+    NSMutableDictionary *propertyDict = [NSMutableDictionary dictionary];
+    unsigned int outCount = 0, i = 0;
+    objc_property_t *properties = class_copyPropertyList(aClass, &outCount);
+    
+    for (i = 0; i < outCount; i++) {
+        objc_property_t property = properties[i];
+        NSString *propertyName = [NSString stringWithUTF8String:property_getName(property)];
+        
+        NSString *propertyType = [NSString stringWithUTF8String:property_getAttributes(property)];
+        NSString* propertyClassName = nil;
+        if ([propertyType hasPrefix:@"T@"]) {
+            
+            NSRange range = [propertyType rangeOfString:@","];
+            if(range.location > 4 && range.location <= propertyType.length) {
+                range = NSMakeRange(3,range.location - 4);
+                propertyClassName = [propertyType substringWithRange:range];
+                if([propertyClassName hasSuffix:@">"]) {
+                    NSRange categoryRange = [propertyClassName rangeOfString:@"<"];
+                    if (categoryRange.length>0) {
+                        propertyClassName = [propertyClassName substringToIndex:categoryRange.location];
+                    }
+                }
+            }
+        } else if([propertyType hasPrefix:@"T{"]) {
+            NSRange range = [propertyType rangeOfString:@"="];
+            if(range.location > 2 && range.location <= propertyType.length) {
+                range = NSMakeRange(2, range.location-2);
+                propertyClassName = [propertyType substringWithRange:range];
+            }
+        } else {
+            propertyType = [propertyType lowercaseString];
+            if ([propertyType hasPrefix:@"ti"] || [propertyType hasPrefix:@"tb"]) {
+                propertyClassName = @"int";
+            } else if ([propertyType hasPrefix:@"tf"]) {
+                propertyClassName = @"float";
+            } else if([propertyType hasPrefix:@"td"]) {
+                propertyClassName = @"double";
+            } else if([propertyType hasPrefix:@"tl"] || [propertyType hasPrefix:@"tq"]) {
+                propertyClassName = @"long";
+            } else if ([propertyType hasPrefix:@"tc"]) {
+                propertyClassName = @"char";
+            } else if([propertyType hasPrefix:@"ts"]) {
+                propertyClassName = @"short";
+            }
+        }
+        if (propertyClassName.length == 0) {
+            DLog(@"[hahahahhahhaahahh]");
+        } else {
+            propertyDict[propertyName] = propertyClassName;
+        }
+        
+    }
+    
+    return propertyDict;
+}
+
+ */
+
+
 @end

@@ -20,6 +20,19 @@
 #define kScaleFrom_iPhone5(_X_) (_X_ * (kWindowWidth/320))
 #define kScaleFrom_iPhone6(_X_) (_X_ * (kWindowWidth/375))
 
+// 在需要计算时间的代码块前后写上TICK,TOCK宏即可
+#define TICK   NSDate *startTime = [NSDate date]
+#define TOCK   NSLog(@"Time: %f", -[startTime timeIntervalSinceNow])
+
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+
+
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @interface DQBUtil : NSObject
 
 /**
@@ -49,5 +62,13 @@
  *  根据指定大小压缩图片
  */
 + (UIImage *)compressImage:(UIImage *)image withSize:(CGSize)size;
+
+
+/**
+ *  获取一个类的属性列表
+
++ (NSArray *)propertyListOfClass:(Class)aClass;
++ (NSDictionary *)propertyNameTypeDictOfClass:(Class)aClass;
+ */
 
 @end
